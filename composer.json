@@ -1,0 +1,49 @@
+{
+    "name": "skeeks/cms-mysql-session",
+    "description": "Mysql session for SkeekS CMS",
+    "keywords": [
+        "module",
+        "cms",
+        "skeeks",
+        "sx",
+        "app",
+        "yii2",
+        "logger",
+        "log",
+        "target"
+    ],
+    "homepage": "https://skeeks.com/",
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://cms.skeeks.com",
+        "wiki": "https://cms.skeeks.com/docs",
+        "source": "https://github.com/skeeks-cms/cms-log-db-target"
+    },
+    "authors": [
+        {
+            "name": "Semenov Alexander",
+            "email": "semenov@skeeks.com"
+        }
+    ],
+    "require": {
+        "skeeks/cms": "^5.0 || dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "skeeks\\cms\\mysqlSession\\": "src/"
+        }
+    },
+    "extra": {
+        "config-plugin": {
+            "web": [
+                "src/config/common.php",
+                "src/config/web.php"
+            ],
+            "console": [
+                "src/config/common.php",
+                "src/config/console.php"
+            ]
+        }
+    }
+}
