@@ -12,7 +12,8 @@ class m211208_162718_create_table__cms_session extends Migration
 {
     public function safeUp()
     {
-        $tableName = '{{%cms_session}}';
+        //$tableName = '{{%cms_session}}';
+        $tableName = 'cms_session';
         $tableExist = $this->db->getTableSchema($tableName, true);
         if ($tableExist)
         {
@@ -55,16 +56,10 @@ class m211208_162718_create_table__cms_session extends Migration
         } else {
             throw new Exception('!!!');
         }
-
-
-
-        $this->createIndex('idx_log_level', $tableName, 'level');
-        $this->createIndex('idx_log_category', $tableName, 'category');
-
     }
 
     public function safeDown()
     {
-        $this->dropTable("{{%log_db_target}}");
+        $this->dropTable("{{%cms_session}}");
     }
 }
