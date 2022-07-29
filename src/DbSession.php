@@ -25,7 +25,7 @@ class DbSession extends \yii\web\DbSession
      * Не запускать сессию с ботами
      * @var bool
      */
-    public $is_write_for_bot = true;
+    public $is_write_for_bot = false;
 
     public function init()
     {
