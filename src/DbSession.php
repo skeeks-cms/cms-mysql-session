@@ -19,7 +19,7 @@ class DbSession extends \yii\web\DbSession
     /**
      * @var float|int
      */
-    public $timeout = 3600 * 24 * 365;
+    //public $timeout = 3600 * 24 * 365;
 
     /**
      * Не запускать сессию с ботами
@@ -36,6 +36,7 @@ class DbSession extends \yii\web\DbSession
                 'ip'               => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null,
                 'https_user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null,
                 'updated_at'       => time(),
+                //'url'       => \Yii::$app->request->absoluteUrl,
             ];
         };
 
@@ -60,7 +61,29 @@ class DbSession extends \yii\web\DbSession
             return true;
         }
 
+        if ($this->_isNoStartSessionByRequest()) {
+            return true;
+        }
+
         return parent::writeSession($id, $data);
+    }
+
+    /**
+     * На этих действиях не нужно сохранять сессию
+     * @return bool
+     */
+    protected function _isNoStartSessionByRequest() {
+        if (\Yii::$app->controller && in_array(\Yii::$app->controller->uniqueId, [
+            'seo/robots',
+            'cms/favicon',
+            'cms/online',
+            'cms/image-preview',
+            
+        ])) {
+            return true;
+        }
+        
+        return false;
     }
 
     protected function _isBot()
@@ -127,6 +150,7 @@ class DbSession extends \yii\web\DbSession
             'Nigma.ru',
             'bing.com',
             'dotnetdotcom',
+            'StormCrawler',
         ];
         foreach ($bots as $bot) {
             if (stripos($_SERVER['HTTP_USER_AGENT'], $bot) !== false) {
