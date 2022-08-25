@@ -151,6 +151,7 @@ class DbSession extends \yii\web\DbSession
             'bing.com',
             'dotnetdotcom',
             'StormCrawler',
+            'GeedoBot',
         ];
         foreach ($bots as $bot) {
             if (stripos($_SERVER['HTTP_USER_AGENT'], $bot) !== false) {
