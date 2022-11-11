@@ -27,6 +27,7 @@ class DbSession extends \yii\web\DbSession
      */
     public $is_write_for_bot = false;
 
+
     public function init()
     {
         $this->writeCallback = function ($session) {
