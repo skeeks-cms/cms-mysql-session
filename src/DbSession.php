@@ -57,7 +57,7 @@ class DbSession extends \yii\web\DbSession
         }
 
         //Если бот то не записываем сессию
-        if ($this->_isBot()) {
+        if ($this->isBot()) {
             return true;
         }
 
@@ -86,7 +86,7 @@ class DbSession extends \yii\web\DbSession
         return false;
     }
 
-    protected function _isBot()
+    public function isBot()
     {
         /* Эта функция будет проверять, является ли посетитель роботом поисковой системы */
         $bots = [
@@ -103,6 +103,7 @@ class DbSession extends \yii\web\DbSession
             'AhrefsBot',
             'SeoBot',
             'rambler',
+            'Lighthouse',
             'googlebot',
             'aport',
             'yahoo',
