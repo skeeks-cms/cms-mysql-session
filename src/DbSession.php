@@ -9,6 +9,9 @@
 namespace skeeks\cms\mysqlSession;
 
 
+use yii\base\Exception;
+use yii\helpers\Json;
+use yii\helpers\VarDumper;
 /**
  * @author Semenov Alexander <semenov@skeeks.com>
  */
@@ -31,18 +34,54 @@ class DbSession extends \yii\web\DbSession
     public function init()
     {
         $this->writeCallback = function ($session) {
+
+            /*$string = '';
+            try {
+                throw new Exception("1");
+            } catch (\Exception $e) {
+                $string = VarDumper::dumpAsString($e);
+            }*/
+
             return [
                 'cms_user_id'      => \Yii::$app->user->id,
                 'cms_site_id'      => \Yii::$app->skeeks->site ? \Yii::$app->skeeks->site->id : null,
                 'ip'               => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null,
                 'https_user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null,
                 'updated_at'       => time(),
-                //'url'       => \Yii::$app->request->absoluteUrl,
+                /*'controller'       => \Yii::$app->controller ? \Yii::$app->controller->uniqueId : '',
+                'ref'       => \Yii::$app->request->referrer ? \Yii::$app->request->referrer : "",
+                'url'       => \Yii::$app->request->absoluteUrl,
+                'server'       => Json::encode($_SERVER),
+                'cookie'       => Json::encode($_COOKIE),*/
+                //'stack'       => $string,
             ];
         };
 
         parent::init();
     }
+
+    /*public function openSession($savePath, $sessionName)
+    {
+
+        //Если бот то не записываем сессию
+        /*if ($this->isBot()) {
+            return true;
+        }
+
+        if ($this->_isNoStartSessionByRequest()) {
+            return true;
+        }*/
+
+        /*if (YII_ENV_DEV) {
+            print_r(\Yii::$app->controller->uniqueId);die;
+            throw new Exception("111");
+            var_dump($this->getUseStrictMode());
+            die;
+
+
+
+        return parent::openSession($savePath, $sessionName);
+    }*/
 
 
     /**
@@ -73,17 +112,18 @@ class DbSession extends \yii\web\DbSession
      * На этих действиях не нужно сохранять сессию
      * @return bool
      */
-    protected function _isNoStartSessionByRequest() {
+    protected function _isNoStartSessionByRequest()
+    {
         if (\Yii::$app->controller && in_array(\Yii::$app->controller->uniqueId, [
-            'seo/robots',
-            'cms/favicon',
-            'cms/online',
-            'cms/image-preview',
-            
-        ])) {
+                'seo/robots',
+                'cms/favicon',
+                'cms/online',
+                'cms/image-preview',
+
+            ])) {
             return true;
         }
-        
+
         return false;
     }
 
