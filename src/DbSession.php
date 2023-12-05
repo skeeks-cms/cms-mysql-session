@@ -42,10 +42,15 @@ class DbSession extends \yii\web\DbSession
                 $string = VarDumper::dumpAsString($e);
             }*/
 
+            $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
+            if ($ip !== null) {
+                $ips = explode(",", $ip);
+                $ip = \yii\helpers\ArrayHelper::getValue($ips, "0");
+            }
             return [
                 'cms_user_id'      => \Yii::$app->user->id,
                 'cms_site_id'      => \Yii::$app->skeeks->site ? \Yii::$app->skeeks->site->id : null,
-                'ip'               => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null,
+                'ip'               => $ip,
                 'https_user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null,
                 'updated_at'       => time(),
                 /*'controller'       => \Yii::$app->controller ? \Yii::$app->controller->uniqueId : '',
