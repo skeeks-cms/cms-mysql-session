@@ -35,22 +35,10 @@ class DbSession extends \yii\web\DbSession
     {
         $this->writeCallback = function ($session) {
 
-            /*$string = '';
-            try {
-                throw new Exception("1");
-            } catch (\Exception $e) {
-                $string = VarDumper::dumpAsString($e);
-            }*/
-
-            $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
-            if ($ip !== null) {
-                $ips = explode(",", $ip);
-                $ip = \yii\helpers\ArrayHelper::getValue($ips, "0");
-            }
             return [
                 'cms_user_id'      => \Yii::$app->user->id,
                 'cms_site_id'      => \Yii::$app->skeeks->site ? \Yii::$app->skeeks->site->id : null,
-                'ip'               => $ip,
+                'ip'               => \Yii::$app->request->getUserIP(),
                 'https_user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null,
                 'updated_at'       => time(),
                 /*'controller'       => \Yii::$app->controller ? \Yii::$app->controller->uniqueId : '',
@@ -98,18 +86,22 @@ class DbSession extends \yii\web\DbSession
     {
         //Если для ботов можно записывать сессию тогда ничего не делаем
         if ($this->is_write_for_bot === true) {
+            \Yii::info("write session", self::class . "-success");
             return parent::writeSession($id, $data);
         }
 
         //Если бот то не записываем сессию
         if ($this->isBot()) {
+            \Yii::info("is bot", self::class . "-error");
             return true;
         }
 
         if ($this->_isNoStartSessionByRequest()) {
+            \Yii::info("is not start by request", self::class . "-error");
             return true;
         }
 
+        \Yii::info("write session", self::class . "-success");
         return parent::writeSession($id, $data);
     }
 
