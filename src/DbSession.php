@@ -192,8 +192,9 @@ class DbSession extends \yii\web\DbSession
             'StormCrawler',
             'GeedoBot',
         ];
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         foreach ($bots as $bot) {
-            if (stripos($_SERVER['HTTP_USER_AGENT'], $bot) !== false) {
+            if (stripos($userAgent, $bot) !== false) {
                 $botname = $bot;
                 return true;
             }
